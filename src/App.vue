@@ -5,22 +5,25 @@
 </template>
 <style src="../assets/bootstrap/css/bootstrap.min.css"></style>
 <style src="../assets/dist/css/AdminLTE.min.css"></style>
-<style src="../assets/plugins/iCheck/square/blue.css"></style>
+<style src="../assets/dist/css/skins/_all-skins.min.css"></style>
+
+
 
 <script>
+
 
 export default {
   name: 'App',
 
   created () {   
-    let loginToken = this.$store.getters.accessToken
-    
-    if(!loginToken.loginStatus){
-      this.$router.push({path: '/login'})
-    } else {
-      console.log('loginToken',loginToken)
-      this.$router.push({path: '/'})
-    }
+
+    // let loginToken = this.$store.getters.getUser
+    // if(!loginToken.loginStatus){
+    //   this.$router.push({path: '/'})
+    // } else {
+    //   console.log('loginToken',loginToken)
+    //   this.$router.push({path: '/home'})
+    // }
   }
 }
 </script>
@@ -36,11 +39,11 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  /* font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 60px; */
 }
 </style>

@@ -8,17 +8,29 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        loginStatus:false,
-        api_token : ''
-    },    
+        user: {
+            loginStatus: false,
+            api_token: '',
+            name: '',
+            email: '',
+            userId: ''
+        },
+        tableInfo: {
+            category: "",
+            columns: []
+        }
+    },
     actions,
     mutations,
     plugins,
     // actions
 
     getters: {
-        accessToken(state) {
-            return state
+        getUser(state) {
+            return state.user
+        },
+        getTableInfo(state) {
+            return state.tableInfo
         }
     }
 })

@@ -19,8 +19,10 @@
             <!-- /.box-header -->
             <div class="box-body">
              <!-- table -->
-                <input name="date" type="date"/>
-                <datatable v-bind="$data" />
+              <div class="col-md-2 pull-left">
+                <datepicker format="yyyy-MM-dd" input-class="form-control" :clear-button='true' clear-button-icon='fa fa-close' v-on:selected="select_date"></datepicker>
+              </div>                
+              <datatable v-bind="$data" />
             </div>
             <!-- /.box-body -->
           </div>
@@ -36,7 +38,10 @@ import Datatable from "vue2-datatable-component";
 
 import Service from "../api/service";
 import mockData from "../mockData";
+import Datepicker from "vuejs-datepicker";
+
 Vue.use(Datatable);
+
 export default {
   data() {
     return {
@@ -44,8 +49,12 @@ export default {
       data: [],
       total: 0,
       query: {},
-      category: ""
+      category: "",
+      string_date: ""
     };
+  },
+  components: {
+    Datepicker: Datepicker
   },
   computed: {
     tableInfo() {
@@ -59,20 +68,51 @@ export default {
   watch: {
     query: {
       handler(query) {
-        mockData(query, this.category).then(({ rows, total }) => {
-          this.data = rows;
-          this.total = total;
-        });
+        mockData(query, this.category, this.string_date).then(
+          ({ rows, total }) => {
+            this.data = rows;
+            this.total = total;
+          }
+        );
       },
       deep: true
     },
     category: {
       handler() {
-        mockData(this.query, this.category).then(({ rows, total }) => {
+        mockData(this.query, this.category, this.string_date).then(
+          ({ rows, total }) => {
+            this.data = rows;
+            this.total = total;
+          }
+        );
+      }
+    }
+  },
+  methods: {
+    select_date(val) {
+      if (val == null) {
+        this.string_date = "";
+      } else {
+        this.string_date = this.get_string_date(val);
+      }
+      mockData(this.query, this.category, this.string_date).then(
+        ({ rows, total }) => {
           this.data = rows;
           this.total = total;
-        });
-      }
+        }
+      );
+    },
+
+    get_string_date(val) {
+      return (
+        val.getFullYear() +
+        "-" +
+        (val.getMonth() + 1 < 10 ? "0" : "") +
+        (val.getMonth() + 1) +
+        "-" +
+        (val.getDate() < 10 ? "0" : "") +
+        val.getDate()
+      );
     }
   }
 };
@@ -83,6 +123,11 @@ ul.pagination .fa {
 }
 .table {
   font-size: 14px;
+}
+.vdp-datepicker__clear-button {
+  position: absolute;
+  right: 8px;
+  top: 9px;
 }
 </style>
 

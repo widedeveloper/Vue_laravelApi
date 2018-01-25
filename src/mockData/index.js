@@ -12,7 +12,8 @@ const purify = o => JSON.parse(JSON.stringify(o)) // purify data
  * @param   {Object} query
  * @resolve {Object}
  */
-export default function mockData(query, type) {
+export default function mockData(query, type, string_date) {
+    console.log("date",string_date)
     query = purify(query)
     const { limit = 10, offset = 0, sort = '', order = '' } = query
 
@@ -21,13 +22,13 @@ export default function mockData(query, type) {
 
         switch (type) {
             case 'radios':
-                fetchData.getradios(get_callback);
+                fetchData.getradios(string_date,get_callback);
                 break;
             case 'regions':
-                fetchData.getregions(get_callback);
+                fetchData.getregions(string_date,get_callback);
                 break;
             case 'streams':
-                fetchData.getstreams(get_callback);
+                fetchData.getstreams(string_date,get_callback);
                 break;
             default:
                 break;

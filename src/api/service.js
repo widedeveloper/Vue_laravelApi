@@ -151,10 +151,13 @@ export class getData extends Service{
         this.token =this.persistent.getCache('token')
     }
 
-    apiFetch(api, cb){
-
+    apiFetch(api, vdate, cb){
+        
+        var pdata = new FormData();console.log("ASDFASDF",vdate)
+        pdata.append('vdate', vdate);
         var headers={
             method: 'post',
+            body: pdata,
             headers: new Headers({
                 'Accept': 'application/json',
                 'Authorization': 'Bearer ' + this.token
@@ -163,16 +166,16 @@ export class getData extends Service{
         super.apiFetch(this.service + "/" + api, headers, cb);
     }
 
-    getradios(cb){
-        this.apiFetch("radios", cb);
+    getradios(vdate, cb){
+        this.apiFetch("radios", vdate,cb);
     }
 
-    getregions(cb){
-        this.apiFetch("regions", cb);
+    getregions(vdate, cb){
+        this.apiFetch("regions", vdate,cb);
     }
 
-    getstreams(cb){
-        this.apiFetch("streams", cb);
+    getstreams(vdate,cb){
+        this.apiFetch("streams", vdate,cb);
     }
 
     // getProvinces(cb){
@@ -217,8 +220,6 @@ export class Account extends Service {
     }
 
     login(email, password, cb) {
-
-
         let postBody = {
             email: email,
             password: password

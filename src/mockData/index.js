@@ -1,7 +1,6 @@
 import moment from 'moment'
 import uniq from 'lodash/uniq'
 import orderBy from 'lodash/orderBy'
-import users from './dataSource'
 
 import { getData } from '../api/service'
 const typeOf = o => Object.prototype.toString.call(o).slice(8, -1).toLowerCase()
@@ -44,13 +43,13 @@ export default function mockData(query, type, string_date) {
                 rows: rows.slice(offset, offset + limit),
                 total: rows.length
             }
-            const consoleGroupName = 'Mock data - ' + moment().format('YYYY-MM-DD HH:mm:ss')
-            setTimeout(() => {
-                console.group(consoleGroupName)
-                console.info('Receive:', query)
-                console.info('Respond:', res)
-                console.groupEnd(consoleGroupName)
-            }, 0)
+            // const consoleGroupName = 'Mock data - ' + moment().format('YYYY-MM-DD HH:mm:ss')
+            // setTimeout(() => {
+            //     console.group(consoleGroupName)
+            //     console.info('Receive:', query)
+            //     console.info('Respond:', res)
+            //     console.groupEnd(consoleGroupName)
+            // }, 0)
             resolve(purify(res))
         }
     })

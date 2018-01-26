@@ -1,14 +1,14 @@
 export class Service {
     constructor(enableCaching, cacheId) {
-        // this.path = "http://162.243.157.117/api/";
+        // this.path = "http://162.243.157.117/api/";   //backend Api url
         if (enableCaching) {
             this.cache = new ApiCache(cacheId);
         }
     }
 
-    apiFetch1(param, type, headers, callBack){
-        console.log(headers,param)
-        // let url = 'http://107.170.214.12/api/getdata.php?method='+type+'&param='+param ;
+    //For CURL Request
+    apiCURLFetch(param, type, headers, callBack){
+        // let url = 'http://107.170.214.12/api/getdata.php?method='+type+'&param='+param ;  //currrent Client side Url
         let url = '/api/getdata.php?method='+type+'&param='+param ;
 
         if (this.cache != null && this.cache.hasCache(param)) {
@@ -38,7 +38,7 @@ export class Service {
                 }
             });
     }
-
+    //For GET/POST Request
     apiFetch(api, headers, callBack) {
         let url = this.path + api;
 
@@ -81,7 +81,7 @@ export class Service {
             }
         }
 
-        this.apiFetch1(api, 'login',{
+        this.apiCURLFetch(api, 'login',{
             method: 'post',
             body: pdata
         }, cb)
@@ -114,7 +114,6 @@ export class ApiCache {
 
         let removeKeys = [];
 
-
         for (let i = 0; i < this.cache.length; i++) {
             let key = this.cache.key(i);
             if (key.indexOf(this.id + '/') === 0) {
@@ -125,7 +124,6 @@ export class ApiCache {
         for (let i = 0; i < removeKeys.length; i++) {
             this.removeCache(removeKeys[i]);
         }
-
     }
 }
 
@@ -171,7 +169,6 @@ export class PersistentData {
         for (let i = 0; i < removeKeys.length; i++) {
             this.removeData(removeKeys[i]);
         }
-
     }
 }
 
@@ -197,7 +194,7 @@ export class getData extends Service{
             //     'Authorization': 'Bearer ' + this.token
             // })
         }        
-        super.apiFetch1(this.service + "/" + api, 'getdata',headers, cb);
+        super.apiCURLFetch(this.service + "/" + api, 'getdata',headers, cb);
     }
 
     getradios(vdate, cb){
@@ -211,14 +208,6 @@ export class getData extends Service{
     getstreams(vdate,cb){
         this.apiFetch("streams", vdate,cb);
     }
-
-    // getProvinces(cb){
-    //     this.apiFetch("province", cb);
-    // }
-
-    // getHowHear(cb){
-    //     this.apiFetch("how-hear", cb);
-    // }
 }
 
 export class Account extends Service {

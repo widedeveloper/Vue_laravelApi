@@ -23,8 +23,6 @@ export default new Vuex.Store({
     actions,
     mutations,
     plugins,
-    // actions
-
     getters: {
         getUser(state) {
             return state.user

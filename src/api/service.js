@@ -1,9 +1,42 @@
 export class Service {
     constructor(enableCaching, cacheId) {
-        this.path = "http://localhost:82/api/";
+        // this.path = "http://162.243.157.117/api/";
         if (enableCaching) {
             this.cache = new ApiCache(cacheId);
         }
+    }
+
+    apiFetch1(param, type, headers, callBack){
+        console.log(headers,param)
+        // let url = 'http://107.170.214.12/api/getdata.php?method='+type+'&param='+param ;
+        let url = '/api/getdata.php?method='+type+'&param='+param ;
+
+        if (this.cache != null && this.cache.hasCache(param)) {
+            var json = JSON.parse(this.cache.getCache(param));
+            if (callBack) {
+                callBack(json);
+            } else {
+                console.log(json);
+            }
+            return;
+        }
+        fetch(url, headers)
+            .then(response => response.json())
+            .then((json) => {
+              
+                if (callBack) {
+                    callBack(json);
+                } else {
+                    console.log("ASDFASDF",json);
+                }
+            })
+            .catch(error => {
+                if (callBack) {
+                    callBack(error);
+                } else {
+                    console.log(error);
+                }
+            });
     }
 
     apiFetch(api, headers, callBack) {
@@ -48,7 +81,7 @@ export class Service {
             }
         }
 
-        this.apiFetch(api, {
+        this.apiFetch1(api, 'login',{
             method: 'post',
             body: pdata
         }, cb)
@@ -155,15 +188,16 @@ export class getData extends Service{
         
         var pdata = new FormData();console.log("ASDFASDF",vdate)
         pdata.append('vdate', vdate);
+        pdata.append('token', 'Bearer ' + this.token)
         var headers={
             method: 'post',
             body: pdata,
-            headers: new Headers({
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + this.token
-            })
+            // headers: new Headers({
+            //     'Accept': 'application/json',
+            //     'Authorization': 'Bearer ' + this.token
+            // })
         }        
-        super.apiFetch(this.service + "/" + api, headers, cb);
+        super.apiFetch1(this.service + "/" + api, 'getdata',headers, cb);
     }
 
     getradios(vdate, cb){
@@ -231,7 +265,7 @@ export class Account extends Service {
             query.push(p + "=" + postBody[p]);
         }
 
-        this.apiPost("api_login?" + query.join("&"), "", (json) => {
+        this.apiPost("api_login&" + query.join("&"), "", (json) => {
             this.persistent.clear();
             if (json.token) {
                 this.persistent.clear();
